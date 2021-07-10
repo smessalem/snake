@@ -2,36 +2,22 @@ import turtle
 import random #We'll need this later in the lab
 import easygui
 import pygame
+import graphics
+import player1_functions
 
-pygame.mixer.init()
-pygame.mixer.music.load('tetris_theme.wav')
-pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.5)
+graphics.bg_music()
 
 turtle.title("Snake Game")
 
 turtle.bgcolor('green')
 
-border = turtle.Turtle()
-border.penup()
-border.goto(320,320)
-border.pendown()
-border.shape('circle')
-border.width(20)
-border.goto(320,-320)
-border.goto(-320,-320)
-border.goto(-320,320)
-border.goto(320,320)
+graphics.border()
 
-t_title = turtle.Turtle()
-t_title.hideturtle()
-t_title.pu()
-t_title.setposition(-200,350)
-t_title.write("Snake Game", font=("Arial", 50, "bold"))
+graphics.title_txt()
 
 
 wn = turtle.Screen()
-wn.bgpic("grass_bg.gif")
+wn.bgpic("resources/grass_bg.gif")
 
 score = 0
 score2 = 0
@@ -41,7 +27,7 @@ turtle.tracer(1,0) #This helps the turtle move more smoothly
 SIZE_X=1000
 SIZE_Y=1000
 turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window
-                             #size.
+#size.
 turtle.penup()
 
 SQUARE_SIZE = 20 #Size of the squares that make up the snake
@@ -77,15 +63,15 @@ turtle.hideturtle()
 
 #Function to draw a part of the snake on the screen
 
-def new_stamp():
-    snake_pos = snake.pos() #Get snake’s position
-    #Append the position tuple to pos_list
-    pos_list.append(snake_pos)
-    #snake.stamp() returns a stamp ID. Save it in some variable
-    snake_stamp = snake.stamp()
-    #print(snake_stamp)
-    #append that stamp ID to stamp_list.
-    stamp_list.append(snake_stamp)
+# def new_stamp():
+#     snake_pos = snake.pos() #Get snake’s position
+#     #Append the position tuple to pos_list
+#     pos_list.append(snake_pos)
+#     #snake.stamp() returns a stamp ID. Save it in some variable
+#     snake_stamp = snake.stamp()
+#     #print(snake_stamp)
+#     #append that stamp ID to stamp_list.
+#     stamp_list.append(snake_stamp)
 
 def new_stamp2():
     snake2_pos = snake2.pos() #Get snake’s position
@@ -109,7 +95,7 @@ for snake_body in range(START_LENGTH):
     x_pos += SQUARE_SIZE
     snake.goto(x_pos, y_pos)
 
-    new_stamp()
+    player1_functions.new_stamp(snake, pos_list, stamp_list)
 
 #player 2
 for snake2_body in range(START_LENGTH):
@@ -226,9 +212,9 @@ turtle.onkeypress(right2, "d")
 
 turtle.listen()
 
-turtle.register_shape("smol_apple.gif")
+turtle.register_shape("resources/smol_apple.gif")
 food = turtle.clone()
-food.shape('smol_apple.gif')
+food.shape('resources/smol_apple.gif')
 food.hideturtle()
 food_pos = [(100, 100), (-100, 100), (-100, -100), (100, -100)]
 food_stamps = []
@@ -329,7 +315,7 @@ def move_snake():
         snake.goto(x_pos - SQUARE_SIZE, y_pos)
 
     if len(food_stamps) <= 6:
-            make_food()
+        make_food()
 
     #player2
     if new_x_pos2 >= RIGHT_EDGE:
@@ -372,16 +358,16 @@ def move_snake():
         snake2.goto(x_pos2 - SQUARE_SIZE, y_pos2)
 
     if len(food_stamps) <= 6:
-            make_food()
+        make_food()
 
 
-    new_stamp()
+    player1_functions.new_stamp(snake, pos_list, stamp_list)
 
     new_stamp2()
 
 
     # Now, call the move_snake() function.  This starts moving the snake.  Once it starts
-        # moving, it keeps moving by itself:
+    # moving, it keeps moving by itself:
 
 
     # Make the snake stamp a new square on the screen
@@ -396,7 +382,7 @@ def move_snake():
         food_pos.pop(food_index)  # Remove eaten food position
         food_stamps.pop(food_index)  # Remove eaten food stamp
         print("You have eaten the food!")
-        new_stamp()
+        player1_functions.new_stamp(snake, pos_list, stamp_list)
         score += 1
 
     if snake2.pos() in food_pos:
@@ -424,7 +410,7 @@ def move_snake():
         quit()
     turtle.ontimer(move_snake, TIME_STEP)  # <--- new line here
 move_snake()
-    # remove the last piece of the snake (Hint Functions are FUN!)
+# remove the last piece of the snake (Hint Functions are FUN!)
 
 
 turtle.mainloop()
